@@ -8,109 +8,243 @@
         body {
             margin: 0;
             padding: 0;
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background-color: #fdf2f8; /* ලා රෝස පැහැති පසුබිම */
+            color: #d81b60;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #fce4ec; /* ලස්සන ලා රෝස පාට පසුබිමක් */
-            font-family: 'Arial', sans-serif;
-            overflow: hidden; /* බොත්තම එළියට යන එක නවත්වන්න */
-        }
-        .container {
             text-align: center;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1); /* ලස්සන ත්‍රිමාණ පෙනුමක් */
-            z-index: 10;
+            overflow: hidden;
         }
-        img {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%; /* පින්තූරය රවුම් කරන්න */
-            object-fit: cover;
-            border: 5px solid #ff4081;
+
+        .screen {
+            display: none; /* මුලින් ඔක්කොම හංගලා තියන්නේ */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .active {
+            display: flex; /* සක්‍රිය තිරය පමණක් පෙන්වයි */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Screen 1: Question --- */
+        #cat-img {
+            width: 150px;
             margin-bottom: 20px;
         }
-        h1 {
-            color: #ff4081;
-            margin-bottom: 30px;
-            font-size: 28px;
-        }
-        .buttons {
+        h1 { font-size: 32px; margin-bottom: 30px; }
+        
+        .btn-container {
             display: flex;
-            justify-content: center;
             gap: 20px;
-            position: relative;
+            align-items: center;
         }
+        
         button {
-            font-size: 18px;
-            padding: 12px 35px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
+            padding: 15px 40px;
+            font-size: 20px;
             font-weight: bold;
-            transition: background-color 0.3s;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
         }
+        
         #yesBtn {
-            background-color: #4CAF50; /* කොළ පාට Yes බොත්තම */
+            background-color: #81c784; /* කොළ පාට */
             color: white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(129, 199, 132, 0.4);
         }
-        #yesBtn:hover {
-            background-color: #45a049;
-        }
+        
         #noBtn {
-            background-color: #f44336; /* රතු පාට No බොත්තම */
+            background-color: #e57373; /* රතු පාට */
             color: white;
-            position: absolute;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(229, 115, 115, 0.4);
         }
+
+        /* --- Screen 2: Gifts Menu --- */
+        .gifts-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .gift-box {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s;
+            width: 100px;
+        }
+        .gift-box:hover {
+            transform: translateY(-10px);
+        }
+        .gift-icon {
+            font-size: 50px;
+        }
+
+        /* --- Screens 3, 4, 5: The Gifts --- */
+        .back-btn {
+            margin-top: 30px;
+            background-color: #f48fb1;
+            color: white;
+            padding: 10px 30px;
+        }
+
+        /* Photos Gallery (Gift 1) */
+        .photo-gallery {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 800px;
+        }
+        .polaroid {
+            background: white;
+            padding: 10px 10px 30px 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transform: rotate(-3deg);
+        }
+        .polaroid:nth-child(even) { transform: rotate(4deg); }
+        .polaroid img { width: 150px; height: 150px; object-fit: cover; }
+
+        /* Letter (Gift 3) */
+        .letter-paper {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: left;
+            font-family: 'Georgia', serif;
+            color: #333;
+            line-height: 1.6;
+        }
+        
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- ඔයාගේ ෆොටෝ එකේ නම photo.jpg නිසා ඒක එහෙම්මම තිබ්බා -->
-        <img src="photo.jpg" alt="Special Photo">
-        <h1>Do you love me? ❤️</h1>
-        
-        <div class="buttons">
-            <button id="yesBtn">Yes</button>
-            <button id="noBtn">No</button>
+    <!-- SCREEN 1: THE QUESTION -->
+    <div id="screen1" class="screen active">
+        <!-- මෙතනට ඕනෙනම් අර cute cat ගේ GIF එකක් දාන්න පුළුවන් (දැනට Emoji එකක් දාලා තියෙන්නේ) -->
+        <div style="font-size: 100px; margin-bottom: 20px;">🥺</div>
+        <h1 id="questionText">Do you love me? ❤️</h1>
+        <div class="btn-container">
+            <button id="yesBtn" onclick="showScreen('screen2')">YES</button>
+            <button id="noBtn" onclick="handleNoClick()">NO</button>
         </div>
     </div>
 
+    <!-- SCREEN 2: THE GIFTS -->
+    <div id="screen2" class="screen">
+        <div style="font-size: 100px; margin-bottom: 10px;">🥰</div>
+        <h1>I knew you'd say yes 💕</h1>
+        <div class="gifts-container">
+            <div class="gift-box" onclick="showScreen('screen3')">
+                <div class="gift-icon">🎁</div>
+                <p>GIFT 1</p>
+            </div>
+            <div class="gift-box" onclick="showScreen('screen4')">
+                <div class="gift-icon">🎁</div>
+                <p>GIFT 2</p>
+            </div>
+            <div class="gift-box" onclick="showScreen('screen5')">
+                <div class="gift-icon">🎁</div>
+                <p>GIFT 3</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 3: GIFT 1 (PHOTOS) -->
+    <div id="screen3" class="screen">
+        <h1>Captured memories ✨</h1>
+        <div class="photo-gallery">
+            <!-- ඔයාගේ පින්තූර වල නම් මෙතනට දෙන්න (photo.jpg, photo2.jpg වගේ) -->
+            <div class="polaroid"><img src="photo.jpg" alt="Memory"></div>
+            <div class="polaroid"><img src="photo.jpg" alt="Memory"></div>
+            <div class="polaroid"><img src="photo.jpg" alt="Memory"></div>
+        </div>
+        <button class="back-btn" onclick="showScreen('screen2')">Go Back</button>
+    </div>
+
+    <!-- SCREEN 4: GIFT 2 (MUSIC) -->
+    <div id="screen4" class="screen">
+        <h1>A song that reminds me of us 🎵</h1>
+        <!-- ඔයාගේ YouTube ලින්ක් එකේ 'watch?v=' වෙනුවට 'embed/' දාලා මෙතනට දෙන්න -->
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" 
+        title="YouTube video player" frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen></iframe>
+        <br>
+        <button class="back-btn" onclick="showScreen('screen2')">Go Back</button>
+    </div>
+
+    <!-- SCREEN 5: GIFT 3 (LETTER) -->
+    <div id="screen5" class="screen">
+        <div class="letter-paper">
+            <h2>Dear Love,</h2>
+            <p>Today is all about you, and I just want you to know how grateful I am to have you in my life. From the moment you came into my world, everything felt warmer, kinder, and more meaningful.</p>
+            <p>Being with you feels like home. In the quiet moments and the loud ones, in laughter and in silence, I find comfort in you.</p>
+            <p>Forever yours, <br> ❤️</p>
+        </div>
+        <button class="back-btn" onclick="showScreen('screen2')">Go Back</button>
+    </div>
+
     <script>
-        const noBtn = document.getElementById('noBtn');
-        const yesBtn = document.getElementById('yesBtn');
+        // No බොත්තම එබුවාම අකුරු වෙනස් වෙන කෝඩ් එක
+        let noClickCount = 0;
+        const noMessages = [
+            "Wait... are you sure? 🥺", 
+            "nah that's not right...", 
+            "try again 😭", 
+            "be serious...", 
+            "okay last chance..."
+        ];
 
-        // No බොත්තම මූසිකය ළං කරනකොටම පැනලා යන කෝඩ් එක
-        noBtn.addEventListener('mouseover', () => {
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 50);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 50);
-            
-            noBtn.style.position = 'fixed';
-            noBtn.style.left = `${Math.abs(x)}px`;
-            noBtn.style.top = `${Math.abs(y)}px`;
-        });
+        function handleNoClick() {
+            const questionText = document.getElementById('questionText');
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
 
-        // Yes එබුවාම YouTube වීඩියෝ එකට යන කෝඩ් එක
-        yesBtn.addEventListener('click', () => {
-            // ඔයාට ඕනේ කරන YouTube ලින්ක් එක මේ පහළින් දාන්න
-            window.location.href = 'https://youtu.be/dQw4w9WgXcQ'; 
-        });
+            if (noClickCount < noMessages.length) {
+                // මාතෘකාව වෙනස් කිරීම
+                questionText.innerText = noMessages[noClickCount];
+                
+                // Yes බොත්තම ටික ටික ලොකු කිරීම (වීඩියෝ එකේ වගේ)
+                let currentYesSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+                let currentYesPadding = parseFloat(window.getComputedStyle(yesBtn).paddingTop);
+                
+                yesBtn.style.fontSize = (currentYesSize + 10) + 'px';
+                yesBtn.style.padding = (currentYesPadding + 5) + 'px ' + (currentYesPadding * 3) + 'px';
+                
+                noClickCount++;
+            }
+        }
 
-        // ෆෝන් එකෙන් බලනකොට ටච් කළත් බොත්තම පැනලා යන්න
-        noBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 50);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 50);
-            
-            noBtn.style.position = 'fixed';
-            noBtn.style.left = `${Math.abs(x)}px`;
-            noBtn.style.top = `${Math.abs(y)}px`;
-        });
+        // පිටු (Screens) මාරු කරන කෝඩ් එක
+        function showScreen(screenId) {
+            // ඔක්කොම පිටු හංගනවා
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(screen => {
+                screen.classList.remove('active');
+            });
+
+            // ඕනේ කරන පිටුව විතරක් පෙන්නනවා
+            document.getElementById(screenId).classList.add('active');
+        }
     </script>
 
 </body>
